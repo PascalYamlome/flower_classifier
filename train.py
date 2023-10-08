@@ -126,7 +126,7 @@ def train_loop(model,
         #check if checkpoint exist at the specified directory
         if os.path.exists(model_path_info):
             #load 
-            model,  optimizer_statedict, start_epoch =load_model(model_path_info)
+            model,  optimizer_statedict, start_epoch, _ =load_model(model_path_info)
             optimizer.load_state_dict(optimizer_statedict)
             print(f'{model_arch} model loaded from {model_chkpt_path}.')
             print(f'resuming training from epoch {start_epoch}')
@@ -217,9 +217,8 @@ def train_loop(model,
 
     print("Training finished.")
 
-def load_model_and_test(model, device, path, test_dataloader):
+def test_model(model, device, test_dataloader):
     test_correct = 0
-    model.load_state_dict(torch.load(path))
     model = model.to(device)
     model.eval()
     with torch.no_grad():
@@ -294,7 +293,7 @@ def main():
     
 
     model_path = os.path.join(savemodel_chpt_dir, f"trained_{model_arch}.pth")
-    test_acc = load_model_and_test(model, device, model_path, test_dataloader)
+    test_acc = test_model(model, device,  test_dataloader)
 
     print('****************testing model******************')
 

@@ -23,10 +23,11 @@ def load_model(model_path_info):
     model = model_info['model_class']
     optimizer =  model_info['optimizer_state_dict']
     model.load_state_dict(model_info['model_state_dict'])
+    class_to_idx = model_info['class_to_idx']
     print('model loaded successfuly')
 
 
-    return model, optimizer, epoch
+    return model, optimizer, epoch, class_to_idx
 
 
 

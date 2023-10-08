@@ -35,7 +35,7 @@ def get_predict_input_args():
     parser.add_argument('--checkpoint', type = str, default = '/lustre/home/yamlomep/data/flowers/models/trained_vgg_info.pth', help = 'path to model checkpoint')
     parser.add_argument('--top_k', type= int, default=1, help = 'numper classes with highest probability')
     parser.add_argument('--gpu',  action="store_true", help = 'Train on GPU? default is False unless specified')
-    parser.add_argument('--category_names ', type= str, default='cat_to_name.json', help= 'maps index to actual flower names')
+    parser.add_argument('--category_names', type= str, default='cat_to_name.json', help= 'maps index to actual flower names')
 
 
     return parser.parse_args()
@@ -59,12 +59,23 @@ def main():
     else:
         device = 'cpu'
 
-    model,  _, _ =load_model(model_chpt)
+    model,  _, _, class_to_idx =load_model(model_chpt)
 
+    index_to_class = {value: key for key, value in class_to_idx.items()}
     probs, classes = predict(input_img_path, model, device, topk=top_k)
 
-    print(classes)
-    print(probs)
+    import json
+
+    with open(args.category_names, 'r') as f:
+        cat_to_name = json.load(f)
+
+
+    print('prob \t', 'class_name')
+    for prob, class_index in zip(probs, classes):
+
+
+        classname = cat_to_name[index_to_class[class_index]]
+        print(f'{round(prob,3)}, \t {classname}')
 
 if __name__ == "__main__":
     main()
