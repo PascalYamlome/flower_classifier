@@ -252,6 +252,7 @@ def main():
     save_model_interval = args.save_interval
     learning_rate = args.learning_rate
     resume = args.resume
+    transfer_learn = args.transfer_learn
 
 
     #define dataloaders
@@ -266,7 +267,7 @@ def main():
 
 
     
-    model = buid_CNN_model(model_architecture = model_arch)
+    model = buid_CNN_model(model_architecture = model_arch, TL= transfer_learn)
 
     if use_gpu:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -292,7 +293,7 @@ def main():
                class_to_idx= class_to_idx)
     
 
-    model_path = os.path.join(savemodel_chpt_dir, f"trained_{model_arch}.pth")
+
     test_acc = test_model(model, device,  test_dataloader)
 
     print('****************testing model******************')

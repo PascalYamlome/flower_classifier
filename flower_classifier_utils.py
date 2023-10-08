@@ -41,8 +41,8 @@ def buid_CNN_model(num_classes=102, model_architecture = 'vgg', TL = True):
             model = models.vgg16(weights='VGG16_Weights.DEFAULT')
             for param in model.features.parameters():
                 param.requires_grad = False
-            else:
-                model = models.vgg16()
+        else:
+            model = models.vgg16()
 
 
         model.classifier[6] = nn.Linear(in_features=4096, out_features=num_classes, bias=True)
